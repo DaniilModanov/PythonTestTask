@@ -7,26 +7,27 @@ def get_ab(point1, point2):
 
 
 class PieceWise:
-    plot = {}
+    __plot = {}
 
     def __init__(self, x, y):
-        self.plot[x] = y
+        self.__plot[x] = y
 
     def __call__(self, x=0, y=0):
         return PieceWise(x, y)
 
     def __str__(self):
-        return str(self.plot)
+        return str(self.__plot)
+
 
     def y(self, x):
-        if x in self.plot.keys():
-            return self.plot[x]
+        if x in self.__plot.keys():
+            return self.__plot[x]
         else:
-            abscissa = [i for i in sorted(self.plot.keys())]
+            abscissa = [i for i in sorted(self.__plot.keys())]
             for i in range(0, len(abscissa) - 1):
                 if abscissa[i] < x < abscissa[i + 1]:
-                    p1 = (abscissa[i], self.plot[abscissa[i]])
-                    p2 = (abscissa[i + 1], self.plot[abscissa[i + 1]])
+                    p1 = (abscissa[i], self.__plot[abscissa[i]])
+                    p2 = (abscissa[i + 1], self.__plot[abscissa[i + 1]])
                     a, b = get_ab(p1, p2)
                     y = a * x + b
                     return y
@@ -41,7 +42,7 @@ class PieceWise:
         print("-" * 67)
         counter = 1
         prev_point = None
-        for i in sorted(self.plot.items()):
+        for i in sorted(self.__plot.items()):
             if counter == 2:
                 print("{:2} {:^16} {:>2}".format("|", str(i), "|"), end="")
                 if prev_point is not None:
@@ -50,29 +51,15 @@ class PieceWise:
                     print("{:^10.3f} {:1}".format(b, "|"))
                     print("-" * 67)
                 counter = 1
-            if i[0] != max(self.plot.keys()):
+            if i[0] != max(self.__plot.keys()):
                 print("{:2} {:^16} {:1}".format("|", str(i), " "), end="")
                 counter += 1
                 prev_point = i
 
 
 if __name__ == '__main__':
-    f = PieceWise(5, 8)(6, 9)(0, 3)(2, 5)
-    # f = f(2,40)(5,9)(7, 15)
+    f = PieceWise(0, 0)(1, 1)(-4, -9)
+    f = f(2, 40)(5, 5)(2, 15)
     print(f)
     print(f.y(4))
     f.table()
-
-# def piecewise_func(x1, y1):
-#     plot = {x1: y1}
-#
-#     def decorator(x2=None, y2=None):
-#         nonlocal plot
-#         if x2 is None and y2 is None:
-#             return plot
-#         plot[x2] = y2
-#         return decorator
-#
-#     def y(number):
-#         return plot[number]
-#     return decorator
